@@ -394,154 +394,161 @@ const AdminPanel = ({ onClose }) => {
                         <p className="mb-2 text-sm text-gray-500">
                           <span className="font-semibold">Click to upload</span> or drag and drop
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG,GIF or WebP (MAX. 5MB)
-
-
-
-)}
-
-{/* OR Image URL */}
-            <div>
-              <p className="text-center text-gray-500 text-sm mb-2">OR</p>
-              <label className="block text-gray-700 font-medium mb-2">
-                Image URL
-              </label>
-              <input
-                type="url"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                disabled={!!imageFile}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 disabled:bg-gray-100"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-
-            {/* Upload Progress */}
-            {uploadProgress > 0 && uploadProgress < 100 && (
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className="bg-yellow-500 h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-            )}
-
-            {message && (
-              <div className={`p-4 rounded-lg flex items-center gap-2 ${
-                message.includes('✗') || message.includes('Error')
-                  ? 'bg-red-100 text-red-700 border border-red-300'
-                  : 'bg-green-100 text-green-700 border border-green-300'
-              }`}>
-                <span className="font-bold">{message.includes('✗') ? '✗' : '✓'}</span>
-                <span>{message}</span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full ${
-                activeTab === 'products'
-                  ? 'bg-yellow-500 hover:bg-yellow-600'
-                  : 'bg-red-500 hover:bg-red-600'
-              } text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg`}
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
-                  Adding...
-                </>
-              ) : (
-                <>
-                  {activeTab === 'products' ? <Plus size={20} /> : <Tag size={20} />}
-                  Add {activeTab === 'products' ? 'Product' : 'Offer'}
-                </>
-              )}
-            </button>
-          </form>
-        </div>
-
-        {/* Existing Items Section */}
-        <div>
-          <h3 className="text-lg font-bold mb-4 text-gray-800">
-            Existing {activeTab === 'products' ? 'Products' : 'Offers'}
-          </h3>
-
-          {loadingItems ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-yellow-500 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading items...</p>
-            </div>
-          ) : existingItems.length === 0 ? (
-            <div className="text-center py-8 bg-gray-50 rounded-lg">
-              <p className="text-gray-600">No items found.</p>
-              <p className="text-sm text-gray-500 mt-2">Add your first item using the form.</p>
-            </div>
-          ) : (
-            <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
-              {existingItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex gap-4">
-                    {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF or WebP (MAX. 5MB)</p>
+                      </div>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
                       />
-                    ) : (
-                      <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-3xl">🔧</span>
-                      </div>
-                    )}
+                    </label>
+                  )}
 
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-800 truncate">{item.name}</h4>
-                      <p className="text-sm text-gray-600 line-clamp-2 mt-1">
-                        {item.description}
-                      </p>
-                      <div className="flex items-center gap-3 mt-2 flex-wrap">
-                        <span className="text-lg font-bold text-yellow-600">
-                          ${item.price?.toFixed(2)}
-                        </span>
-                        {item.category && (
-                          <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                            {item.category}
-                          </span>
-                        )}
-                        {item.stock !== undefined && (
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            item.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                          }`}>
-                            Stock: {item.stock}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="flex-shrink-0 text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors"
-                      title="Delete item"
-                    >
-                      <Trash2 size={20} />
-                    </button>
+                  {/* OR Image URL */}
+                  <div className="mt-4">
+                    <p className="text-center text-gray-500 text-sm mb-2">OR</p>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      Image URL
+                    </label>
+                    <input
+                      type="url"
+                      name="imageUrl"
+                      value={formData.imageUrl}
+                      onChange={handleChange}
+                      disabled={!!imageFile}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 disabled:bg-gray-100"
+                      placeholder="https://example.com/image.jpg"
+                    />
                   </div>
                 </div>
-              ))}
+
+                {/* Upload Progress */}
+                {uploadProgress > 0 && uploadProgress < 100 && (
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-yellow-500 h-2.5 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                )}
+
+                {message && (
+                  <div className={`p-4 rounded-lg flex items-center gap-2 ${
+                    message.includes('✗') || message.includes('Error')
+                      ? 'bg-red-100 text-red-700 border border-red-300'
+                      : 'bg-green-100 text-green-700 border border-green-300'
+                  }`}>
+                    <span className="font-bold">{message.includes('✗') ? '✗' : '✓'}</span>
+                    <span>{message}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`w-full ${
+                    activeTab === 'products'
+                      ? 'bg-yellow-500 hover:bg-yellow-600'
+                      : 'bg-red-500 hover:bg-red-600'
+                  } text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg`}
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      {activeTab === 'products' ? <Plus size={20} /> : <Tag size={20} />}
+                      Add {activeTab === 'products' ? 'Product' : 'Offer'}
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
-          )}
+
+            {/* Existing Items Section */}
+            <div>
+              <h3 className="text-lg font-bold mb-4 text-gray-800">
+                Existing {activeTab === 'products' ? 'Products' : 'Offers'}
+              </h3>
+
+              {loadingItems ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-yellow-500 mx-auto"></div>
+                  <p className="mt-4 text-gray-600">Loading items...</p>
+                </div>
+              ) : existingItems.length === 0 ? (
+                <div className="text-center py-8 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600">No items found.</p>
+                  <p className="text-sm text-gray-500 mt-2">Add your first item using the form.</p>
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+                  {existingItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex gap-4">
+                        {item.imageUrl ? (
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-3xl">🔧</span>
+                          </div>
+                        )}
+
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-gray-800 truncate">{item.name}</h4>
+                          <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+                            {item.description}
+                          </p>
+                          <div className="flex items-center gap-3 mt-2 flex-wrap">
+                            <span className="text-lg font-bold text-yellow-600">
+                              ${item.price?.toFixed(2)}
+                            </span>
+                            {item.category && (
+                              <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                                {item.category}
+                              </span>
+                            )}
+                            {item.stock !== undefined && (
+                              <span className={`text-xs px-2 py-1 rounded ${
+                                item.stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                              }`}>
+                                Stock: {item.stock}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="flex-shrink-0 text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors"
+                          title="Delete item"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-);
+  );
 };
+
 export default AdminPanel;
