@@ -67,97 +67,99 @@ const ProductList = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-500 mx-auto">
-Loading products...
-
-);
-}
-return (
-
-
-
-
-
-Our Products
-
-<div className="text-gray-600">
-        <span className="font-semibold">{filteredProducts.length}</span> products found
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-500 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading products...</p>
       </div>
-    </div>
+    );
+  }
 
-    {/* Search and Filters */}
-    <div className="bg-white p-4 rounded-lg shadow-md mb-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          />
+  return (
+    <section className="bg-gray-50 min-h-screen py-8">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Our Products
+          </h1>
+          <div className="text-gray-600">
+            <span className="font-semibold">{filteredProducts.length}</span> products found
+          </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="relative">
-          <SlidersHorizontal className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 appearance-none bg-white"
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat === 'all' ? 'All Categories' : cat}
-              </option>
+        {/* Search and Filters */}
+        <div className="bg-white p-4 rounded-lg shadow-md mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+
+            {/* Category Filter */}
+            <div className="relative">
+              <SlidersHorizontal className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 appearance-none bg-white"
+              >
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat === 'all' ? 'All Categories' : cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+            >
+              <option value="newest">Newest First</option>
+              <option value="name">Name (A-Z)</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg shadow">
+            <Package size={64} className="mx-auto text-gray-300 mb-4" />
+            <p className="text-xl text-gray-600">No products found.</p>
+            <p className="text-gray-500 mt-2">
+              {searchTerm ? 'Try adjusting your search terms.' : 'Check back soon for new arrivals!'}
+            </p>
+            {searchTerm && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilter('all');
+                }}
+                className="mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
             ))}
-          </select>
-        </div>
-
-        {/* Sort */}
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
-        >
-          <option value="newest">Newest First</option>
-          <option value="name">Name (A-Z)</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
-        </select>
-      </div>
-    </div>
-
-    {filteredProducts.length === 0 ? (
-      <div className="text-center py-12 bg-white rounded-lg shadow">
-        <Package size={64} className="mx-auto text-gray-300 mb-4" />
-        <p className="text-xl text-gray-600">No products found.</p>
-        <p className="text-gray-500 mt-2">
-          {searchTerm ? 'Try adjusting your search terms.' : 'Check back soon for new arrivals!'}
-        </p>
-        {searchTerm && (
-          <button
-            onClick={() => {
-              setSearchTerm('');
-              setFilter('all');
-            }}
-            className="mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
-          >
-            Clear Filters
-          </button>
+          </div>
         )}
       </div>
-    ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    )}
-  </div>
-</section>
-);
+    </section>
+  );
 };
+
 export default ProductList;
